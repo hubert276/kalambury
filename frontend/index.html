@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset='utf-8'>
+    <meta http-equiv='X-UA-Compatible' content='IE=edge'>
+    <title>Kalambury</title>
+    <meta name='viewport' content='width=device-width, initial-scale=1'>
+    <link rel='stylesheet' type='text/css' media='screen' href='mystyle.css'>
+    <script src="https://cdn.socket.io/4.6.1/socket.io.min.js"></script>
+    <script defer src="frontend.js"></script>
+</head>
+
+<body>
+    <h1>KALAMBURY</h1>
+
+    <!-- pierwsza strona -->
+    <div id="first">
+        <p id="enterName">Wpisz swój nick : </p>
+        <input type="text" id="inputName" placeholder="Nick" autocapitalize="off">
+        <br>
+        <button id="playBtn">GRAJ</button>
+    </div>
+
+
+    <!-- <button id="srcBtn">Search for a lobby</button> -->
+    <!-- <button id="crtBtn">Create a lobby</button> -->
+
+
+    <!-- druga strona -->
+
+    <div id="second">
+        <header>Dołącz do lobby</header>
+        <nav>
+            <ul id="lobbiesList"></ul>
+        </nav>
+        <button id="crtBtn">Stwórz lobby</button>
+        <br>
+        <div id="secondCreate">
+            <input type="text" id="inputLobbyName" placeholder="nazwa lobby">
+            Hasło?
+            <input type="checkbox" id="passCheckbox" onclick="writePass()">
+            <input type="text" id="inputPassword" placeholder="hasło">
+            <br>
+            <button id="playBtn2">GRAJ</button>
+        </div>
+    </div>
+
+    <div id="third">
+
+    </div>
+
+</body>
+
+<script>
+    document.getElementById("second").style.display = "none"
+    document.getElementById("playBtn").addEventListener("click", function () {
+        play();
+    })
+
+    document.getElementById("crtBtn").addEventListener("click", function () {
+        document.getElementById("secondCreate").style.display = "block"
+    })
+
+    document.getElementById("playBtn2").addEventListener("click", function () {
+        createLobby();
+    })
+
+</script>
+
+</html>
