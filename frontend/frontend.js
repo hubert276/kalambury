@@ -2,21 +2,26 @@ const socket = io();
 const frontendPlayers = [];
 const frontendLobbies = [];
 let list = document.getElementById("lobbiesList");
+let list2 = document.getElementById("lobbyPlayers");
+let lobNam;
 
+// wprowadzono złą nazwę użytkownika
 socket.on('wrongUser', () => {
     alert("Username already taken")
 })
 
+// aktualizacja listy użytkowników
 socket.on('updatePlayers', (backendPlayers) => {
+    // console.log(backendPlayers)
 
     for (const player in backendPlayers) {
         if (!frontendPlayers[player]) {
             frontendPlayers.push(backendPlayers[player])
         }
     }
-    console.log(frontendPlayers)
 })
 
+// zmiana storny po utworzeniu użytkonika
 socket.on('newPlayer', () => {
     pullLobbies();
     document.getElementById("first").style.display = "none"
@@ -25,28 +30,56 @@ socket.on('newPlayer', () => {
     document.getElementById("inputPassword").style.display = "none"
 })
 
+// aktualizacja listy lobby
 socket.on('updateLobbies', (backendLobbies) => {
+    
     for (const lobby in backendLobbies) {
         if (!frontendLobbies[lobby]) {
-            frontendLobbies.push(backendLobbies[lobby])
-        }
-    }
-
-    for (const lobby in frontendLobbies) {
-        x = frontendLobbies[lobby].lobbyName
-        if (!list[x]) {
-            var li = document.createElement('li');
-            li.innerText = frontendLobbies[lobby].lobbyName;
-            list.appendChild(li);
+            frontendLobbies[lobby] = backendLobbies[lobby]
+            let x = backendLobbies[lobby].lobbyName
+            if (!list[x]) {
+                var li = document.createElement('li');
+                li.classList.add('lobbyList')
+                li.innerText = x;
+                list.appendChild(li);
+            }
         }
     }
     console.log(frontendLobbies)
 })
 
+// aktualizacja listy graczy w tym samym lobby
+socket.on('updateLobbyPlayers', (backend) => {
+
+    for (const player in backend.lobby.players) {
+        t = backend.lobby.players[player]
+        if (!frontendLobbies[backend.id].players[player]) {
+            frontendLobbies[backend.id].players.push(t)
+            if (!list2[t]) {
+                var li = document.createElement('li');
+                li.innerText = t;
+                list2.appendChild(li);
+            }
+        }
+    }
+    console.log(frontendLobbies)
+})
+
+// wprowadzono złą nazwę lobby
 socket.on('wrongLobby', () => {
     alert("Lobby already exists")
 })
 
+// zmiana strony przy wejściu do lobby
+socket.on('enterLobby', (lobbyName) => {
+    console.log("entering a lobby")
+    console.log(frontendLobbies)
+    document.getElementById("second").style.display = "none"
+    document.getElementById("third").style.display = "block"
+    // console.log(socket.rooms)
+})
+
+// sprawdzanie czy użytkownik już istnieje lub jego stworzenie
 function play() {
     username = document.getElementById("inputName").value
     if (username == null || username == '') {
@@ -56,12 +89,7 @@ function play() {
     }
 }
 
-socket.on('enterLobby', (lobbyName) => {
-    console.log("entering a lobby")
-    document.getElementById("second").style.display = "none"
-    document.getElementById("third").style.display = "block"
-})
-
+// wyświetlanie pola do wpisania hasła
 function writePass() {
     checkbox = document.getElementById("passCheckbox").checked
     if (checkbox == true) {
@@ -71,6 +99,7 @@ function writePass() {
     }
 }
 
+// tworzenie lobby
 function createLobby() {
     lobbyName = ""
     lobbyPass = ""
@@ -91,4 +120,6 @@ function pullLobbies() {
     socket.emit('pullLobbies')
 }
 
-
+function chooseLobby(lobby) {
+    socket.emit('chooseLobby', lobby)
+}

@@ -22,13 +22,7 @@
         <button id="playBtn">GRAJ</button>
     </div>
 
-
-    <!-- <button id="srcBtn">Search for a lobby</button> -->
-    <!-- <button id="crtBtn">Create a lobby</button> -->
-
-
     <!-- druga strona -->
-
     <div id="second">
         <header>Dołącz do lobby</header>
         <nav>
@@ -46,14 +40,16 @@
         </div>
     </div>
 
+    <!-- trzecia strona -->
     <div id="third">
-
+        <ul id="lobbyPlayers">Gracze w lobby</ul>
     </div>
 
 </body>
 
 <script>
     document.getElementById("second").style.display = "none"
+    document.getElementById("third").style.display = "none"
     document.getElementById("playBtn").addEventListener("click", function () {
         play();
     })
@@ -66,6 +62,12 @@
         createLobby();
     })
 
+    document.querySelector("ul").addEventListener("click", function(event) {
+        if(event.target.classList.contains("lobbyList")) {
+            lobNam = event.target.innerText;
+            chooseLobby(lobNam);
+        }
+    });
 </script>
 
 </html>
