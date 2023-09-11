@@ -1,4 +1,4 @@
-const canvas = document.getElementById("paintCanvas");
+canvas = document.getElementById("paintCanvas");
 const context = canvas.getContext("2d");
 const thicknessInput = document.getElementById("thickness");
 const thicknessValue = document.getElementById("thicknessValue");
@@ -7,9 +7,6 @@ const selectedWord = document.getElementById("selectedWord");
 let isDrawing = false;
 let currentColor = "black"; // Domyślny kolor
 let lineThickness = 2;
-
-// wybor slowa
-
 // Wykonywane przy załadowaniu strony
 window.addEventListener("load", () => {
 	const words = ["jabłko", "samochód", "rower", "kot", "pies", "dom"]; // Przykładowe słowa
@@ -51,10 +48,6 @@ const clearButton = document.getElementById("clearCanvas");
 clearButton.addEventListener("click", () => {
 	context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
 });
-// wybor slowa
-const wordDisplay = document.getElementById("wordDisplay");
-const words = ["jabłko", "samochód", "rower"]; // Przykładowe słowa
-
 // malowanie
 canvas.addEventListener("mousedown", () => {
 	isDrawing = true;

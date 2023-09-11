@@ -168,22 +168,22 @@ io.on("connection", socket => {
 		});
 		socket.emit("enterLobby");
 	});
-	socket.on("createGame", () => {
-		console.log(backendPlayers);
-		console.log(backendLobbies);
-		for (const player in backendPlayers) {
-			for (const lobby in backendLobbies[0].players) {
-				if (player == lobby) {
-					socket.to(backendPlayers[player].socket).emit("createGame2");
-				}
-			}
+	socket.on("createGame", players => {
+		console.log(players);
+		for (const player in players) {
+			socket.to(players[player].socket).emit("createGame2");
 		}
 		socket.emit("createGame2");
 	});
 	// chat
-	socket.on("message", message => {
+	socket.on("message", (message, players) => {
 		console.log(`Otrzymano wiadomość: ${message}`);
-		io.emit("message", message);
+		console.log(players);
+		for (const player in players) {
+			console.log(players);
+			socket.to(players[player].socket).emit("message", message);
+		}
+		socket.emit("message", message);
 	});
 
 	socket.on("disconnect", () => {

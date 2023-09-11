@@ -4,6 +4,8 @@ const frontendLobbies = [];
 let list = document.getElementById("lobbiesList");
 let list2 = document.getElementById("lobbyPlayers");
 let lobNam;
+let Tour = 0;
+let PlayerRole = "";
 
 // wprowadzono złą nazwę użytkownika
 socket.on("wrongUser", () => {
@@ -78,9 +80,8 @@ socket.on("enterLobby", lobbyName => {
 });
 // zmiana strony na gre
 socket.on("createGame2", () => {
+	randomRole();
 	console.log("entering to game");
-	document.getElementById("third").style.display = "none";
-	document.getElementById("gamePage").style.display = "block";
 });
 // sprawdzanie czy użytkownik już istnieje lub jego stworzenie
 function play() {
@@ -133,7 +134,7 @@ function chooseLobby(lobby) {
 	socket.emit("chooseLobby", lobby);
 }
 function createGame() {
-	socket.emit("createGame");
+	socket.emit("createGame", frontendPlayers);
 }
 
 // chat
@@ -148,16 +149,125 @@ function displayMessage(message) {
 	messageElement.textContent = message;
 	chatMessages.appendChild(messageElement);
 }
-
-// Obsługa przycisku "Wyślij"
 const sendButton = document.getElementById("send-button");
 sendButton.addEventListener("click", () => {
 	const chatInput = document.getElementById("chat-input");
 	const message = chatInput.value;
-
-	// Wyślij wiadomość do serwera za pomocą Socket.IO
-	socket.emit("message", message);
-
-	// Wyczyść pole tekstowe
+	socket.emit("message", message, frontendPlayers);
 	chatInput.value = "";
 });
+
+// GAME !!!
+canvas = document.getElementById("paintCanvas");
+const context = canvas.getContext("2d");
+const thicknessInput = document.getElementById("thickness");
+const thicknessValue = document.getElementById("thicknessValue");
+const wordButtonsContainer = document.getElementById("chooseWords");
+const selectedWord = document.getElementById("selectedWord");
+let isDrawing = false;
+let currentColor = "black"; // Domyślny kolor
+let lineThickness = 2;
+
+function randomRole() {
+	for (const player in frontendPlayers) {
+		frontendPlayers[player].role = "observer";
+		if (frontendPlayers[player].socket == socket.id) {
+			PlayerRole = frontendPlayers[player].role;
+		}
+	}
+	frontendPlayers[Tour % frontendPlayers.length].role = "printer";
+	if (frontendPlayers[Tour % frontendPlayers.length].socket == socket.id) {
+		PlayerRole = frontendPlayers[Tour % frontendPlayers.length].role;
+	}
+	console.log(frontendPlayers);
+	roleAtributes();
+}
+function roleAtributes() {
+	console.log(PlayerRole);
+	if (PlayerRole == "printer") {
+		const p = document.createElement("p");
+		p.innerText = "Jestes malarzem";
+		wordButtonsContainer.appendChild(p);
+		const words = ["jabłko", "samochód", "rower", "kot", "pies", "dom"]; // Przykładowe słowa
+		const selectedWords = [];
+		// Wylosuj 3 unikalne słowa
+		while (selectedWords.length < 3) {
+			const randomIndex = Math.floor(Math.random() * words.length);
+			const word = words[randomIndex];
+			if (!selectedWords.includes(word)) {
+				selectedWords.push(word);
+			}
+		}
+		// Wygeneruj przyciski z wylosowanymi słowami
+		selectedWords.forEach(word => {
+			const button = document.createElement("button");
+			button.textContent = word;
+			button.addEventListener("click", () => {
+				selectedWord.textContent = "Narysuj: " + word;
+				document.getElementById("overlay").style.display = "none"; // Ukryj overlay
+				document.getElementById("chat-input").disabled = true;
+				document.getElementById("send-button").disabled = true;
+			});
+			wordButtonsContainer.appendChild(button);
+		});
+		// kolory
+		const colorButtons = document.querySelectorAll(".color-button");
+		colorButtons.forEach(button => {
+			button.addEventListener("click", e => {
+				currentColor = e.target.style.backgroundColor;
+				context.strokeStyle = currentColor;
+			});
+		});
+		// grubosc pisaka
+		thicknessInput.addEventListener("input", e => {
+			lineThickness = parseInt(e.target.value);
+			thicknessValue.textContent = lineThickness; // Aktualizuj wyświetlaną grubość
+		});
+		// czysczenie plotna
+		const clearButton = document.getElementById("clearCanvas");
+		clearButton.addEventListener("click", () => {
+			context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
+		});
+		// malowanie
+		canvas.addEventListener("mousedown", () => {
+			isDrawing = true;
+		});
+		canvas.addEventListener("mousemove", draw);
+		canvas.addEventListener("mouseup", () => {
+			isDrawing = false;
+			context.beginPath();
+		});
+		function draw(e) {
+			if (!isDrawing) return;
+
+			context.lineWidth = lineThickness;
+			context.lineCap = "round";
+
+			context.lineTo(
+				e.clientX - canvas.getBoundingClientRect().left,
+				e.clientY - canvas.getBoundingClientRect().top
+			);
+			context.stroke();
+			context.beginPath();
+			context.moveTo(
+				e.clientX - canvas.getBoundingClientRect().left,
+				e.clientY - canvas.getBoundingClientRect().top
+			);
+		}
+	} else {
+		const p = document.createElement("p");
+		p.innerText = "Jestes obserwatorem";
+		selectedWord.textContent = "Sprobuj zgadnac wylosowane slowo";
+		wordButtonsContainer.appendChild(p);
+		const button = document.createElement("button");
+		button.textContent = "OK";
+		button.addEventListener("click", () => {
+			document.getElementById("overlay").style.display = "none";
+		});
+		wordButtonsContainer.appendChild(button);
+		document.getElementsByClassName("left-div").disabled = true;
+		document.getElementsByClassName("canvas-div").disabled = true;
+	}
+	document.getElementById("third").style.display = "none";
+	document.getElementById("gamePage").style.display = "block";
+}
