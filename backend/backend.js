@@ -175,6 +175,16 @@ io.on("connection", socket => {
 		}
 		socket.emit("createGame2");
 	});
+	//malowanie
+	// przysylanie malowania
+	socket.on("drawing", data => {
+		socket.broadcast.emit("drawing", data);
+	});
+	//czyszczenie
+	socket.on("clearCanvas", () => {
+		// Przekaż akcję do innych klientów, aby również wyczyścili swoje płótno
+		socket.broadcast.emit("clearCanvas");
+	});
 	// chat
 	socket.on("message", (message, players) => {
 		console.log(`Otrzymano wiadomość: ${message}`);

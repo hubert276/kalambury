@@ -4,8 +4,6 @@ const frontendLobbies = [];
 let list = document.getElementById("lobbiesList");
 let list2 = document.getElementById("lobbyPlayers");
 let lobNam;
-let Tour = 0;
-let PlayerRole = "";
 
 // wprowadzono złą nazwę użytkownika
 socket.on("wrongUser", () => {
@@ -167,6 +165,8 @@ const selectedWord = document.getElementById("selectedWord");
 let isDrawing = false;
 let currentColor = "black"; // Domyślny kolor
 let lineThickness = 2;
+let Tour = 0;
+let PlayerRole = "";
 
 function randomRole() {
 	for (const player in frontendPlayers) {
@@ -227,6 +227,8 @@ function roleAtributes() {
 		const clearButton = document.getElementById("clearCanvas");
 		clearButton.addEventListener("click", () => {
 			context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
+			// Wysyłanie akcji do drugiego gracza
+			socket.emit("clearCanvas");
 		});
 		// malowanie
 		canvas.addEventListener("mousedown", () => {
@@ -243,16 +245,22 @@ function roleAtributes() {
 			context.lineWidth = lineThickness;
 			context.lineCap = "round";
 
-			context.lineTo(
-				e.clientX - canvas.getBoundingClientRect().left,
-				e.clientY - canvas.getBoundingClientRect().top
-			);
+			const x = e.clientX - canvas.getBoundingClientRect().left;
+			const y = e.clientY - canvas.getBoundingClientRect().top;
+			let t = 0;
+			// Wysyłanie danych malowania do serwera za pomocą Socket.IO
+			socket.emit("drawing", {
+				x,
+				y,
+				color: currentColor,
+				thickness: lineThickness,
+				t: t,
+			});
+			t = 1;
+			context.lineTo(x, y);
 			context.stroke();
 			context.beginPath();
-			context.moveTo(
-				e.clientX - canvas.getBoundingClientRect().left,
-				e.clientY - canvas.getBoundingClientRect().top
-			);
+			context.moveTo(x, y);
 		}
 	} else {
 		const p = document.createElement("p");
@@ -271,3 +279,20 @@ function roleAtributes() {
 	document.getElementById("third").style.display = "none";
 	document.getElementById("gamePage").style.display = "block";
 }
+socket.on("drawing", data => {
+	// Odbieranie danych malowania od innych graczy i aktualizacja płótna
+	drawOnCanvas(data);
+});
+// Funkcja do rysowania na płótnie na podstawie danych
+function drawOnCanvas(data) {
+	context.lineWidth = data.thickness;
+	context.lineCap = "round";
+	context.strokeStyle = data.color;
+	context.lineTo(data.x, data.y);
+	context.stroke();
+	context.beginPath();
+	context.moveTo(data.x, data.y);
+}
+socket.on("clearCanvas", () => {
+	context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
+});
