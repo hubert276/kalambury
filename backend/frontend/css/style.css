@@ -1,0 +1,62 @@
+* {
+	padding: 0;
+	margin: 0;
+}
+nav {
+	font-size: 42px;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+.left-div {
+	margin-top: 0;
+	width: 150px;
+	display: inline-block;
+}
+.left-div > .color-button {
+	padding: 20px;
+	margin: 5px;
+	border: whitesmoke;
+}
+#canvas-div {
+	display: inline-block;
+	border: 2px solid gray;
+}
+#chat-div {
+	display: inline-block;
+}
+
+#overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5); /* Przyciemnienie w tle */
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999; /* Ustala, żeby był na wierzchu */
+}
+
+#chooseWords {
+	background-color: #fff;
+	width: 400px;
+	height: 300px;
+	text-align: center;
+	padding: 20px;
+}
+
+#chooseButton {
+	padding: 10px 20px;
+	background-color: #333;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+#selectedWord {
+	background-color: #333;
+	color: #fff;
+	padding: 10px;
+	text-align: center;
+}

@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel do malowania</title>
+    <link rel="stylesheet" href="/css/style.css">
+</head>
+
+<body>
+    <div id="overlay">
+        <div id="namePlayer">
+            
+        </div>
+        <div id="chooseWords">
+            <p>Wybierz słowo</p>
+            <div id="wordButtons">
+            </div>
+        </div>
+    </div>
+    <nav>
+        <div id="selectedWord">Lorem ipsum dolor sit amet.</div>
+    </nav>
+    <div id="colorPalette" class="left-div">
+        <button id="black" class="color-button" style="background-color: black;"></button>
+        <button id="red" class="color-button" style="background-color: red;"></button>
+        <button id="black" class="color-button" style="background-color: black;"></button>
+        <button id="red" class="color-button" style="background-color: red;"></button>
+        <button id="blue" class="color-button" style="background-color: blue;"></button>
+        <button id="blue" class="color-button" style="background-color: green;"></button>
+        <div id="lineThickness">
+            <label for="thickness">Grubość linii:</label>
+            <input type="range" id="thickness" min="1" max="10" value="2">
+            <span id="thicknessValue">2</span>
+        </div>
+        <button id="clearCanvas">Wyczyść płótno</button>
+    </div>
+    <div id="canvas-div">
+        <canvas id="paintCanvas" width="800" height="400"></canvas>
+    </div>
+    <div id="chat-div">
+        <div id="chat">
+            <div id="chat-messages"></div>
+            <input type="text" id="chat-input" placeholder="Napisz wiadomość...">
+            <button id="send-button">Wyślij</button>
+        </div>
+    </div>
+    <script src="/js/script.js"></script>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="/js/chat.js"></script>
+</body>
+
+</html>

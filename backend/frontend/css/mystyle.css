@@ -1,0 +1,104 @@
+body {
+	background-color: rgb(47, 58, 156);
+	display: grid;
+	place-items: center;
+	font-family: "Tilt Warp", cursive;
+}
+
+h1 {
+	margin: 10px 0 10px 0;
+	font-size: 5rem;
+	color: rgb(32, 183, 93);
+	-webkit-text-stroke: 5px black;
+}
+
+p {
+	margin: 10px 0 10px 0;
+	font-size: 2rem;
+	color: rgb(255, 255, 255);
+	-webkit-text-stroke: 2px black;
+}
+
+input {
+	margin: 0 0 20px 0;
+	padding: 5px;
+	font-size: 1.2rem;
+	font-family: "Tilt Wrap", cursive;
+}
+
+button {
+	font-size: 1.2rem;
+	margin: 20px 20px 20px 20px;
+	font-family: "Tilt Wrap", cursive;
+	color: rgb(0, 0, 0);
+	/* background-color: rgb(166, 204, 255) */
+}
+
+nav ul {
+	height: 200px;
+	width: 200%;
+}
+
+nav ul {
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+#selected {
+	font-size: 42px;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+.left-div {
+	margin-top: 0;
+	width: 150px;
+	display: inline-block;
+}
+.left-div > .color-button {
+	padding: 20px;
+	margin: 5px;
+	border: whitesmoke;
+}
+#canvas-div {
+	display: inline-block;
+	border: 2px solid gray;
+}
+#chat-div {
+	display: inline-block;
+}
+
+#overlay {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+}
+
+#chooseWords {
+	background-color: #fff;
+	width: 400px;
+	height: 300px;
+	text-align: center;
+	padding: 20px;
+}
+
+#chooseButton {
+	padding: 10px 20px;
+	background-color: #333;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+#selectedWord {
+	background-color: #333;
+	color: #fff;
+	padding: 10px;
+	text-align: center;
+}
