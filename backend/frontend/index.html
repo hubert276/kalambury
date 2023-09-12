@@ -56,6 +56,7 @@
             </div>
         </div>
         <nav id="selected">
+            <div id="idRoom"></div>
             <div id="selectedWord">Lorem ipsum dolor sit amet.</div>
         </nav>
         <div id="colorPalette" class="left-div">
@@ -106,6 +107,7 @@
         }
     });
     document.getElementById("PlayGame").addEventListener("click", function () {
+        console.log(document.querySelector("li").innerText)
         createGame();
     })
 </script>

@@ -1,5 +1,6 @@
 const socket = io();
 const frontendPlayers = [];
+let frontendPlayersRoom = [];
 const frontendLobbies = [];
 let list = document.getElementById("lobbiesList");
 let list2 = document.getElementById("lobbyPlayers");
@@ -61,6 +62,11 @@ socket.on("updateLobbyPlayers", backend => {
 				list2.appendChild(li);
 			}
 		}
+		for (const play in frontendPlayers) {
+			if (t == frontendPlayers[play].name) {
+				frontendPlayers[play].room = frontendLobbies[backend.id].lobbyName;
+			}
+		}
 	}
 	console.log(list2);
 });
@@ -79,7 +85,13 @@ socket.on("enterLobby", lobbyName => {
 	// console.log(socket.rooms)
 });
 // zmiana strony na gre
-socket.on("createGame2", () => {
+socket.on("createGame2", roomName => {
+	frontendPlayersRoom = [];
+	for (const player in frontendPlayers) {
+		if (frontendPlayers[player].room == roomName)
+			frontendPlayersRoom.push(frontendPlayers[player]);
+	}
+	console.log(frontendPlayersRoom);
 	randomRole();
 	console.log("entering to game");
 });
@@ -175,17 +187,19 @@ let delay = 0;
 let correct = 0;
 
 function randomRole() {
-	for (const player in frontendPlayers) {
-		frontendPlayers[player].role = "observer";
-		if (frontendPlayers[player].socket == socket.id) {
-			PlayerRole = frontendPlayers[player].role;
+	for (const player in frontendPlayersRoom) {
+		frontendPlayersRoom[player].role = "observer";
+		if (frontendPlayersRoom[player].socket == socket.id) {
+			PlayerRole = frontendPlayersRoom[player].role;
 		}
 	}
-	frontendPlayers[Tour % frontendPlayers.length].role = "printer";
-	if (frontendPlayers[Tour % frontendPlayers.length].socket == socket.id) {
-		PlayerRole = frontendPlayers[Tour % frontendPlayers.length].role;
+	frontendPlayersRoom[Tour % frontendPlayersRoom.length].role = "printer";
+	if (
+		frontendPlayersRoom[Tour % frontendPlayersRoom.length].socket == socket.id
+	) {
+		PlayerRole = frontendPlayersRoom[Tour % frontendPlayersRoom.length].role;
 	}
-	console.log(frontendPlayers);
+	console.log(frontendPlayersRoom);
 	roleAtributes();
 }
 function roleAtributes() {
@@ -321,8 +335,8 @@ function restart() {
 	document.getElementsByClassName("canvas-div").disabled = false;
 	wordButtonsContainer.innerHTML = "";
 	correct = 0;
-	for (const player in frontendPlayers) {
-		frontendPlayers[player].role = "";
+	for (const player in frontendPlayersRoom) {
+		frontendPlayersRoom[player].role = "";
 	}
 	Tour += 1;
 	randomRole();
@@ -338,7 +352,7 @@ socket.on("word", word => {
 socket.on("correct", number => {
 	correct += number;
 	console.log(correct);
-	if (correct == frontendPlayers.length - 1) {
+	if (correct == frontendPlayersRoom.length - 1) {
 		console.log("Tura zakonczona");
 		restart();
 	}

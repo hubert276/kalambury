@@ -102,3 +102,6 @@ nav ul {
 	padding: 10px;
 	text-align: center;
 }
+#idRoom {
+	display: none;
+}
