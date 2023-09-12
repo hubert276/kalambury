@@ -146,7 +146,7 @@ io.on("connection", socket => {
 	// dołączenie do istniejącego lobby
 	socket.on("chooseLobby", lobNam => {
 		socket.join(lobNam);
-		io.emit("updateLobbies");
+		// io.to(Array.from(socket.rooms)[1]).emit("updateLobbies");
 		let id;
 
 		for (const lobby in backendLobbies) {
@@ -162,7 +162,8 @@ io.on("connection", socket => {
 			}
 		}
 
-		io.emit("updateLobbyPlayers", {
+		// console.log(Array.from(socket.rooms)[1])
+		io.to(Array.from(socket.rooms)[1]).emit("updateLobbyPlayers", {
 			lobby: backendLobbies[id],
 			id: id,
 		});
@@ -170,26 +171,27 @@ io.on("connection", socket => {
 	});
 	socket.on("createGame", players => {
 		console.log(players);
-		for (const player in players) {
-			socket.to(players[player].socket).emit("createGame2");
-		}
-		socket.emit("createGame2");
+		// for (const player in players) {
+		// 	socket.to(players[player].socket).emit("createGame2");
+		// }
+		io.to(Array.from(socket.rooms)[1]).emit("createGame2");
 	});
 	//malowanie
 	// przysylanie malowania
 	socket.on("drawing", data => {
-		socket.broadcast.emit("drawing", data);
+		socket.to(Array.from(socket.rooms)[1]).emit("drawing", data);
 	});
 	//czyszczenie
 	socket.on("clearCanvas", () => {
 		// Przekaż akcję do innych klientów, aby również wyczyścili swoje płótno
-		socket.broadcast.emit("clearCanvas");
+		io.to(Array.from(socket.rooms)[1]).emit("clearCanvas");
 	});
 	// przeslanie slowa do zgadniecia
 	socket.on("word", (word, players) => {
-		for (const player in players) {
-			socket.to(players[player].socket).emit("word", word);
-		}
+		// for (const player in players) {
+		// 	socket.to(players[player].socket).emit("word", word);
+		// }
+		socket.to(Array.from(socket.rooms)[1]).emit("word", word);
 	});
 	// chat
 	socket.on("message", (message, players, word, id) => {
@@ -203,19 +205,22 @@ io.on("connection", socket => {
 					playerName = players[player].name;
 				}
 			}
-			for (const player in players) {
-				socket
-					.to(players[player].socket)
-					.emit("message", `Gracz ${playerName} zgadł`);
-				socket.to(players[player].socket).emit("correct", 1);
-			}
+			// for (const player in players) {
+			// 	socket
+			// 		.to(Array.from(socket.rooms)[1])
+			// 		.emit("message", `Gracz ${playerName} zgadł`);
+			// 	socket.to(players[player].socket).emit("correct", 1);
+			// }
+			socket.to(Array.from(socket.rooms)[1]).emit("message", `Gracz ${playerName} zgadł`);
+			socket.emit("correct", 1)
 			socket.emit("message", "odgadles slowo");
 			socket.emit("correct", 1);
 			socket.emit("stop");
 		} else {
-			for (const player in players) {
-				socket.to(players[player].socket).emit("message", message);
-			}
+			// for (const player in players) {
+			// 	socket.to(players[player].socket).emit("message", message);
+			// }
+			socket.to(Array.from(socket.rooms)[1]).emit("message", message);
 			socket.emit("message", message);
 		}
 	});
