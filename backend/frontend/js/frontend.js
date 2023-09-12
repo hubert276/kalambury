@@ -310,6 +310,23 @@ function drawOnCanvas(data) {
 	xSave = data.x;
 	ySave = data.y;
 }
+// czyszczenie panelu do nastepnej tury i wywolanie kolejnej
+function restart() {
+	context.clearRect(0, 0, canvas.width, canvas.height);
+	socket.emit("clearCanvas");
+	document.getElementById("overlay").style.display = "block";
+	document.getElementById("chat-input").disabled = false;
+	document.getElementById("send-button").disabled = false;
+	document.getElementsByClassName("left-div").disabled = false;
+	document.getElementsByClassName("canvas-div").disabled = false;
+	wordButtonsContainer.innerHTML = "";
+	correct = 0;
+	for (const player in frontendPlayers) {
+		frontendPlayers[player].role = "";
+	}
+	Tour += 1;
+	randomRole();
+}
 socket.on("clearCanvas", () => {
 	context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
 });
@@ -317,4 +334,17 @@ socket.on("clearCanvas", () => {
 socket.on("word", word => {
 	wordGameUser = word;
 	console.log(wordGameUser);
+});
+socket.on("correct", number => {
+	correct += number;
+	console.log(correct);
+	if (correct == frontendPlayers.length - 1) {
+		console.log("Tura zakonczona");
+		restart();
+	}
+});
+socket.on("stop", () => {
+	selectedWord.textContent = "Poczekaj na reszte graczy";
+	document.getElementById("chat-input").disabled = true;
+	document.getElementById("send-button").disabled = true;
 });
