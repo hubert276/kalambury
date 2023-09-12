@@ -211,8 +211,10 @@ io.on("connection", socket => {
 			// 		.emit("message", `Gracz ${playerName} zgadł`);
 			// 	socket.to(players[player].socket).emit("correct", 1);
 			// }
-			socket.to(Array.from(socket.rooms)[1]).emit("message", `Gracz ${playerName} zgadł`);
-			socket.emit("correct", 1)
+			socket
+				.to(Array.from(socket.rooms)[1])
+				.emit("message", `Gracz ${playerName} zgadł`);
+			socket.to(Array.from(socket.rooms)[1]).emit("correct", 1);
 			socket.emit("message", "odgadles slowo");
 			socket.emit("correct", 1);
 			socket.emit("stop");
