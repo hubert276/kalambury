@@ -4,6 +4,8 @@ const frontendLobbies = [];
 let list = document.getElementById("lobbiesList");
 let list2 = document.getElementById("lobbyPlayers");
 let lobNam;
+let wordGame = "";
+let wordGameUser = "";
 
 // wprowadzono złą nazwę użytkownika
 socket.on("wrongUser", () => {
@@ -151,7 +153,7 @@ const sendButton = document.getElementById("send-button");
 sendButton.addEventListener("click", () => {
 	const chatInput = document.getElementById("chat-input");
 	const message = chatInput.value;
-	socket.emit("message", message, frontendPlayers);
+	socket.emit("message", message, frontendPlayers, wordGameUser, socket.id);
 	chatInput.value = "";
 });
 
@@ -170,6 +172,7 @@ let PlayerRole = "";
 let xSave = 0;
 let ySave = 0;
 let delay = 0;
+let correct = 0;
 
 function randomRole() {
 	for (const player in frontendPlayers) {
@@ -206,7 +209,9 @@ function roleAtributes() {
 			const button = document.createElement("button");
 			button.textContent = word;
 			button.addEventListener("click", () => {
-				selectedWord.textContent = "Narysuj: " + word;
+				selectedWord.textContent = word;
+				wordGame = word;
+				socket.emit("word", word, frontendPlayers);
 				document.getElementById("overlay").style.display = "none"; // Ukryj overlay
 				document.getElementById("chat-input").disabled = true;
 				document.getElementById("send-button").disabled = true;
@@ -307,4 +312,9 @@ function drawOnCanvas(data) {
 }
 socket.on("clearCanvas", () => {
 	context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
+});
+// przeslanie slowa do zgadniecia
+socket.on("word", word => {
+	wordGameUser = word;
+	console.log(wordGameUser);
 });

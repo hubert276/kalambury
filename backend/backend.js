@@ -185,15 +185,36 @@ io.on("connection", socket => {
 		// Przekaż akcję do innych klientów, aby również wyczyścili swoje płótno
 		socket.broadcast.emit("clearCanvas");
 	});
-	// chat
-	socket.on("message", (message, players) => {
-		console.log(`Otrzymano wiadomość: ${message}`);
-		console.log(players);
+	// przeslanie slowa do zgadniecia
+	socket.on("word", (word, players) => {
 		for (const player in players) {
-			console.log(players);
-			socket.to(players[player].socket).emit("message", message);
+			socket.to(players[player].socket).emit("word", word);
 		}
-		socket.emit("message", message);
+	});
+	// chat
+	socket.on("message", (message, players, word, id) => {
+		console.log(players);
+		console.log(`Otrzymano wiadomość: ${message}`);
+		console.log(word);
+		if (message == word) {
+			let playerName = " ";
+			for (const player in players) {
+				if (players[player].socket == id) {
+					playerName = players[player].name;
+				}
+			}
+			for (const player in players) {
+				socket
+					.to(players[player].socket)
+					.emit("message", `Gracz ${playerName} zgadł`);
+			}
+			socket.emit("message", "odgadles slowo");
+		} else {
+			for (const player in players) {
+				socket.to(players[player].socket).emit("message", message);
+			}
+			socket.emit("message", message);
+		}
 	});
 
 	socket.on("disconnect", () => {
