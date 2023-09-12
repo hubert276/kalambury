@@ -167,6 +167,9 @@ let currentColor = "black"; // Domyślny kolor
 let lineThickness = 2;
 let Tour = 0;
 let PlayerRole = "";
+let xSave = 0;
+let ySave = 0;
+let delay = 0;
 
 function randomRole() {
 	for (const player in frontendPlayers) {
@@ -238,6 +241,7 @@ function roleAtributes() {
 		canvas.addEventListener("mouseup", () => {
 			isDrawing = false;
 			context.beginPath();
+			delay = 1000;
 		});
 		function draw(e) {
 			if (!isDrawing) return;
@@ -247,20 +251,19 @@ function roleAtributes() {
 
 			const x = e.clientX - canvas.getBoundingClientRect().left;
 			const y = e.clientY - canvas.getBoundingClientRect().top;
-			let t = 0;
 			// Wysyłanie danych malowania do serwera za pomocą Socket.IO
 			socket.emit("drawing", {
 				x,
 				y,
 				color: currentColor,
 				thickness: lineThickness,
-				t: t,
+				delay: delay,
 			});
-			t = 1;
 			context.lineTo(x, y);
 			context.stroke();
 			context.beginPath();
 			context.moveTo(x, y);
+			delay = 0;
 		}
 	} else {
 		const p = document.createElement("p");
@@ -288,10 +291,19 @@ function drawOnCanvas(data) {
 	context.lineWidth = data.thickness;
 	context.lineCap = "round";
 	context.strokeStyle = data.color;
+	if (xSave != 0 || ySave != 0) {
+		const distance = (((data.x - xSave) ^ 2) + (data.y - ySave)) ^ 2;
+		console.log(distance);
+		if (Math.abs(distance) + data.delay > 1000) {
+			context.moveTo(data.x, data.y);
+		}
+	}
 	context.lineTo(data.x, data.y);
 	context.stroke();
 	context.beginPath();
 	context.moveTo(data.x, data.y);
+	xSave = data.x;
+	ySave = data.y;
 }
 socket.on("clearCanvas", () => {
 	context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
