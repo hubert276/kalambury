@@ -209,24 +209,20 @@ io.on("connection", socket => {
 				if (players[player].socket == id) {
 					playerName = players[player].name;
 				}
+				if (players[player].role == "printer") {
+					printerName = players[player].name;
+				}
 			}
-			// for (const player in players) {
-			// 	socket
-			// 		.to(Array.from(socket.rooms)[1])
-			// 		.emit("message", `Gracz ${playerName} zgadł`);
-			// 	socket.to(players[player].socket).emit("correct", 1);
-			// }
 			socket
 				.to(Array.from(socket.rooms)[1])
 				.emit("message", `Gracz ${playerName} zgadł`);
-			socket.to(Array.from(socket.rooms)[1]).emit("correct", 1);
+			socket
+				.to(Array.from(socket.rooms)[1])
+				.emit("correct", 1, playerName, printerName);
 			socket.emit("message", "odgadles slowo");
-			socket.emit("correct", 1);
+			socket.emit("correct", 1, playerName, printerName);
 			socket.emit("stop");
 		} else {
-			// for (const player in players) {
-			// 	socket.to(players[player].socket).emit("message", message);
-			// }
 			socket.to(Array.from(socket.rooms)[1]).emit("message", message);
 			socket.emit("message", message);
 		}

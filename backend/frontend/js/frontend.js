@@ -377,7 +377,19 @@ socket.on("word", word => {
 	wordGameUser = word;
 	console.log(wordGameUser);
 });
-socket.on("correct", number => {
+socket.on("correct", (number, observerName, printerName) => {
+	console.log(observerName);
+	console.log(printerName);
+	for (const player in frontendPlayersRoom) {
+		if (frontendPlayersRoom[player].name == printerName) {
+			const points = 100 - correct * 10;
+			frontendPlayersRoom[player].score += points;
+		}
+		if (frontendPlayersRoom[player].name == observerName) {
+			const points = 100 / (frontendPlayersRoom.length - 1);
+			frontendPlayersRoom[player].score += points;
+		}
+	}
 	correct += number;
 	console.log(correct);
 	if (correct == frontendPlayersRoom.length - 1) {
