@@ -67,7 +67,8 @@ nav ul {
 	display: inline-block;
 }
 
-#overlay {
+#overlay,
+#overlay2 {
 	position: fixed;
 	top: 0;
 	left: 0;
@@ -79,8 +80,12 @@ nav ul {
 	align-items: center;
 	z-index: 999;
 }
+#overlay2 {
+	display: none;
+}
 
-#chooseWords {
+#chooseWords,
+#endResults {
 	background-color: #fff;
 	width: 400px;
 	height: 300px;
@@ -88,7 +93,8 @@ nav ul {
 	padding: 20px;
 }
 
-#chooseButton {
+#chooseButton,
+#PlayGameRenew {
 	padding: 10px 20px;
 	background-color: #333;
 	color: #fff;
@@ -101,7 +107,4 @@ nav ul {
 	color: #fff;
 	padding: 10px;
 	text-align: center;
-}
-#idRoom {
-	display: none;
 }

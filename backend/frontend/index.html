@@ -55,8 +55,14 @@
             <div id="chooseWords">
             </div>
         </div>
+        <div id="overlay2">
+            <div id="endResults">
+                <p>Koniec gry, wyniki</p>
+                <div id="results"></div>
+                <button id="PlayGameRenew">ZAGRAJ JESZCZE RAZ</button>
+            </div>
+        </div>
         <nav id="selected">
-            <div id="idRoom"></div>
             <div id="selectedWord">Lorem ipsum dolor sit amet.</div>
         </nav>
         <div id="colorPalette" class="left-div">
@@ -107,8 +113,10 @@
         }
     });
     document.getElementById("PlayGame").addEventListener("click", function () {
-        console.log(document.querySelector("li").innerText)
         createGame();
+    })
+    document.getElementById("PlayGameRenew").addEventListener("click", function () {
+        createGameRenew();
     })
 </script>
 

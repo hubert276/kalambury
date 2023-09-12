@@ -177,6 +177,10 @@ io.on("connection", socket => {
 		const roomName = Array.from(socket.rooms)[1];
 		io.to(roomName).emit("createGame2", roomName);
 	});
+	socket.on("createGameRenew", () => {
+		const roomName = Array.from(socket.rooms)[1];
+		io.to(roomName).emit("createGameRenew");
+	});
 	//malowanie
 	// przysylanie malowania
 	socket.on("drawing", data => {

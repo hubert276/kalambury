@@ -1,7 +1,8 @@
 const socket = io();
 const frontendPlayers = [];
-let frontendPlayersRoom = [];
 const frontendLobbies = [];
+const wordButtonsContainer = document.getElementById("chooseWords");
+let frontendPlayersRoom = [];
 let list = document.getElementById("lobbiesList");
 let list2 = document.getElementById("lobbyPlayers");
 let lobNam;
@@ -88,12 +89,20 @@ socket.on("enterLobby", lobbyName => {
 socket.on("createGame2", roomName => {
 	frontendPlayersRoom = [];
 	for (const player in frontendPlayers) {
-		if (frontendPlayers[player].room == roomName)
+		if (frontendPlayers[player].room == roomName) {
+			frontendPlayers[player].score = 0;
 			frontendPlayersRoom.push(frontendPlayers[player]);
+		}
 	}
 	console.log(frontendPlayersRoom);
 	randomRole();
 	console.log("entering to game");
+});
+socket.on("createGameRenew", () => {
+	console.log("new game");
+	document.getElementById("overlay2").style.display = "none";
+	document.getElementById("overlay").style.display = "block";
+	createGame();
 });
 // sprawdzanie czy użytkownik już istnieje lub jego stworzenie
 function play() {
@@ -145,6 +154,9 @@ function pullLobbies() {
 function chooseLobby(lobby) {
 	socket.emit("chooseLobby", lobby);
 }
+function createGameRenew() {
+	socket.emit("createGameRenew");
+}
 function createGame() {
 	socket.emit("createGame", frontendPlayers);
 }
@@ -174,8 +186,8 @@ canvas = document.getElementById("paintCanvas");
 const context = canvas.getContext("2d");
 const thicknessInput = document.getElementById("thickness");
 const thicknessValue = document.getElementById("thicknessValue");
-const wordButtonsContainer = document.getElementById("chooseWords");
 const selectedWord = document.getElementById("selectedWord");
+const resultBox = document.getElementById("results");
 let isDrawing = false;
 let currentColor = "black"; // Domyślny kolor
 let lineThickness = 2;
@@ -204,6 +216,7 @@ function randomRole() {
 }
 function roleAtributes() {
 	console.log(PlayerRole);
+	wordButtonsContainer.innerHTML = "";
 	if (PlayerRole == "printer") {
 		const p = document.createElement("p");
 		p.innerText = "Jestes malarzem";
@@ -328,7 +341,6 @@ function drawOnCanvas(data) {
 function restart() {
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	socket.emit("clearCanvas");
-	document.getElementById("overlay").style.display = "block";
 	document.getElementById("chat-input").disabled = false;
 	document.getElementById("send-button").disabled = false;
 	document.getElementsByClassName("left-div").disabled = false;
@@ -338,8 +350,24 @@ function restart() {
 	for (const player in frontendPlayersRoom) {
 		frontendPlayersRoom[player].role = "";
 	}
-	Tour += 1;
-	randomRole();
+	if (Tour < 1) {
+		document.getElementById("overlay").style.display = "block";
+		Tour += 1;
+		randomRole();
+	} else {
+		finishGame();
+	}
+}
+function finishGame() {
+	Tour = 0;
+	correct = 0;
+	resultBox.innerHTML = "";
+	document.getElementById("overlay2").style.display = "block";
+	for (const player in frontendPlayersRoom) {
+		const p = document.createElement("p");
+		p.innerText = `${frontendPlayersRoom[player].name}: ${frontendPlayersRoom[player].score}`;
+		resultBox.appendChild(p);
+	}
 }
 socket.on("clearCanvas", () => {
 	context.clearRect(0, 0, canvas.width, canvas.height); // Wyczyść płótno
@@ -353,7 +381,7 @@ socket.on("correct", number => {
 	correct += number;
 	console.log(correct);
 	if (correct == frontendPlayersRoom.length - 1) {
-		console.log("Tura zakonczona");
+		console.log("End tour");
 		restart();
 	}
 });
