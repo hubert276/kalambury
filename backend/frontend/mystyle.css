@@ -1,0 +1,188 @@
+body {
+	/* background-color: rgb(10, 24, 150); */
+	height: 100%;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-image: linear-gradient(rgb(4,20, 150), rgb(2, 13, 71));
+	display: grid;
+	place-items: center;
+	font-family: "Tilt Warp", cursive;
+}
+
+h1 {
+	margin: 10px 0 10px 0;
+	font-size: 5rem;
+	color: rgb(32, 183, 93);
+	-webkit-text-stroke: 5px black;
+}
+
+p {
+	margin: 10px 0 10px 0;
+	font-size: 2rem;
+	color: rgb(255, 255, 255);
+	-webkit-text-stroke: 2px black;
+}
+
+input {
+	margin: 0 0 20px 0;
+	padding: 5px;
+	font-size: 1.2rem;
+	font-family: "Tilt Wrap", cursive;
+}
+
+button {
+	font-size: 1.2rem;
+	margin: 20px 20px 20px 20px;
+	font-family: "Tilt Wrap", cursive;
+	color: rgb(0, 0, 0);
+	/* background-color: rgb(166, 204, 255) */
+}
+
+#playBtn {
+	/* margin: 0; */
+	/* position: fixed; */
+	/* width: 100%; */
+	/* top: 50%; */
+	/* left: 50%; */
+	/* -ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%); */
+	/* align-items: center;
+	justify-content: center; */
+	/* text-align: center; */
+}
+#first{
+	text-align: center;
+}
+#second{
+	/* text-align: center; */
+	color:#fff;
+}
+#secondCreate{
+	text-align: center;
+	color: #fff;
+}
+#third{
+	color:#fff;
+	font-size: 1.2rem;
+	/* text-align: center; */
+}
+#dolacz{
+	font-size: 2rem;
+	color: rgb(255, 255, 255);
+	-webkit-text-stroke: 2px black;
+	/* left: 50% */
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+#playGame{
+	font-size: 1.2rem;
+	margin: 20px 20px 20px 20px;
+	font-family: "Tilt Wrap", cursive;
+	color: rgb(0, 0, 0);
+}
+#enterName{
+	text-align: center;
+}
+#lobbiesList {
+	background-color: rgba(2, 13, 71, 0.301);
+	width: 100%;
+	/* left: 25%; */
+}
+#lineThickness{
+	color:#fff
+}
+#paintCanvas{
+	background-color: #fff;
+}
+nav ul {
+	height: 200px;
+	width: 200%;
+}
+
+nav ul {
+	overflow: hidden;
+	overflow-y: scroll;
+}
+
+#selected {
+	font-size: 42px;
+	text-transform: uppercase;
+	text-decoration: none;
+}
+.left-div {
+	margin-top: 0;
+	width: 150px;
+	display: inline-block;
+}
+.left-div > .color-button {
+	padding: 20px;
+	margin: 5px;
+	border: whitesmoke;
+}
+#canvas-div {
+	display: inline-block;
+	border: 2px solid gray;
+	margin: 20px;
+	/* width: 40%; */
+}
+#chat-div {
+	display: inline-block;
+	color: #fff;
+	/* width: 29%; */
+}
+/* #colorPalette{
+	width: 29%;
+} */
+#gamePage{
+	width: 100%;
+	display: flex; justify-content: space-around;
+	text-align: center;
+}
+#selected{
+	margin-bottom: 30px;
+	width: 100%;
+	background-color: #00129d64;
+}
+
+#overlay,
+#overlay2 {
+	position: fixed;
+	top: 0;
+	left: 0;
+	width: 100%;
+	height: 100%;
+	background-color: rgba(0, 0, 0, 0.5);
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	z-index: 999;
+}
+#overlay2 {
+	display: none;
+}
+
+#chooseWords,
+#endResults {
+	background-color: #fff;
+	width: 400px;
+	height: 300px;
+	text-align: center;
+	padding: 20px;
+}
+
+#chooseButton,
+#PlayGameRenew {
+	padding: 10px 20px;
+	background-color: #333;
+	color: #fff;
+	border: none;
+	cursor: pointer;
+}
+
+#selectedWord {
+	background-color: #333;
+	color: #fff;
+	padding: 10px;
+	text-align: center;
+}
