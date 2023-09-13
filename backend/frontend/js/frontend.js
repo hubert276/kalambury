@@ -197,6 +197,10 @@ let xSave = 0;
 let ySave = 0;
 let delay = 0;
 let correct = 0;
+let time = 0;
+let interval;
+const timeGame = 20;
+const tourGame = 2;
 
 function randomRole() {
 	for (const player in frontendPlayersRoom) {
@@ -221,7 +225,22 @@ function roleAtributes() {
 		const p = document.createElement("p");
 		p.innerText = "Jestes malarzem";
 		wordButtonsContainer.appendChild(p);
-		const words = ["jabłko", "samochód", "rower", "kot", "pies", "dom"]; // Przykładowe słowa
+		const words = [
+			"telewizor",
+			"monitor",
+			"rower",
+			"kot",
+			"pies",
+			"dom",
+			"okno",
+			"szafa",
+			"laptop",
+			"myszka",
+			"komputer",
+			"lampa",
+			"kubek",
+			"sluchawki",
+		]; // Przykładowe słowa
 		const selectedWords = [];
 		// Wylosuj 3 unikalne słowa
 		while (selectedWords.length < 3) {
@@ -242,6 +261,7 @@ function roleAtributes() {
 				document.getElementById("overlay").style.display = "none"; // Ukryj overlay
 				document.getElementById("chat-input").disabled = true;
 				document.getElementById("send-button").disabled = true;
+				roundTime();
 			});
 			wordButtonsContainer.appendChild(button);
 		});
@@ -339,6 +359,7 @@ function drawOnCanvas(data) {
 }
 // czyszczenie panelu do nastepnej tury i wywolanie kolejnej
 function restart() {
+	clearInterval(interval);
 	context.clearRect(0, 0, canvas.width, canvas.height);
 	socket.emit("clearCanvas");
 	document.getElementById("chat-input").disabled = false;
@@ -350,7 +371,7 @@ function restart() {
 	for (const player in frontendPlayersRoom) {
 		frontendPlayersRoom[player].role = "";
 	}
-	if (Tour < 1) {
+	if (Tour + 1 < tourGame) {
 		document.getElementById("overlay").style.display = "block";
 		Tour += 1;
 		randomRole();
@@ -376,13 +397,14 @@ socket.on("clearCanvas", () => {
 socket.on("word", word => {
 	wordGameUser = word;
 	console.log(wordGameUser);
+	roundTime();
 });
 socket.on("correct", (number, observerName, printerName) => {
 	console.log(observerName);
 	console.log(printerName);
 	for (const player in frontendPlayersRoom) {
 		if (frontendPlayersRoom[player].name == printerName) {
-			const points = 100 - correct * 10;
+			const points = 100 - correct * 10 - time * 2;
 			frontendPlayersRoom[player].score += points;
 		}
 		if (frontendPlayersRoom[player].name == observerName) {
@@ -392,6 +414,7 @@ socket.on("correct", (number, observerName, printerName) => {
 	}
 	correct += number;
 	console.log(correct);
+	console.log(time);
 	if (correct == frontendPlayersRoom.length - 1) {
 		console.log("End tour");
 		restart();
@@ -402,3 +425,17 @@ socket.on("stop", () => {
 	document.getElementById("chat-input").disabled = true;
 	document.getElementById("send-button").disabled = true;
 });
+
+//time
+function roundTime() {
+	time = 0;
+	interval = setInterval(() => {
+		console.log(time);
+		if (time >= timeGame) {
+			console.log("Interval stop 30s");
+			console.log("End tour");
+			restart();
+		}
+		time += 1;
+	}, 1000);
+}
