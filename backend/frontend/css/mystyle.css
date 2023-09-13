@@ -1,5 +1,9 @@
 body {
-	background-color: rgb(47, 58, 156);
+	/* background-color: rgb(10, 24, 150); */
+	height: 100%;
+	background-repeat: no-repeat;
+	background-attachment: fixed;
+	background-image: linear-gradient(rgb(4,20, 150), rgb(2, 13, 71));
 	display: grid;
 	place-items: center;
 	font-family: "Tilt Warp", cursive;
@@ -34,6 +38,63 @@ button {
 	/* background-color: rgb(166, 204, 255) */
 }
 
+#playBtn {
+	/* margin: 0; */
+	/* position: fixed; */
+	/* width: 100%; */
+	/* top: 50%; */
+	/* left: 50%; */
+	/* -ms-transform: translate(-50%, -50%);
+	transform: translate(-50%, -50%); */
+	/* align-items: center;
+	justify-content: center; */
+	/* text-align: center; */
+}
+#first{
+	text-align: center;
+}
+#second{
+	/* text-align: center; */
+	color:#fff;
+}
+#secondCreate{
+	text-align: center;
+	color: #fff;
+}
+#third{
+	color:#fff;
+	font-size: 1.2rem;
+	/* text-align: center; */
+}
+#dolacz{
+	font-size: 2rem;
+	color: rgb(255, 255, 255);
+	-webkit-text-stroke: 2px black;
+	/* left: 50% */
+	align-items: center;
+	justify-content: center;
+	text-align: center;
+}
+#playGame{
+	font-size: 1.2rem;
+	margin: 20px 20px 20px 20px;
+	font-family: "Tilt Wrap", cursive;
+	color: rgb(0, 0, 0);
+}
+#enterName{
+	text-align: center;
+}
+#lobbiesList {
+	background-color: rgba(2, 13, 71, 0.301);
+	width: 100%;
+	/* left: 25%; */
+}
+#lineThickness{
+	color:#fff
+}
+#paintCanvas{
+	background-color: #fff;
+}
 nav ul {
 	height: 200px;
 	width: 200%;
@@ -62,9 +123,26 @@ nav ul {
 #canvas-div {
 	display: inline-block;
 	border: 2px solid gray;
+	margin: 20px;
+	/* width: 40%; */
 }
 #chat-div {
 	display: inline-block;
+	color: #fff;
+	/* width: 29%; */
+}
+/* #colorPalette{
+	width: 29%;
+} */
+#gamePage{
+	width: 100%;
+	display: flex; justify-content: space-around;
+	text-align: center;
+}
+#selected{
+	margin-bottom: 30px;
+	width: 100%;
+	background-color: #00129d64;
 }
 
 #overlay,
